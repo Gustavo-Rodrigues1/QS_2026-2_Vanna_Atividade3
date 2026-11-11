@@ -1,0 +1,51 @@
+versao: "Versao_B"
+descricao: "Versao experimental com adicao de diretiva restritiva anti-alucinacao no prompt"
+data_execucao: "2026-11-08"
+codigo:
+  repositorio: "atividade3/"
+  commit: "6fa0bf4"
+mudanca_principal_em_relacao_ao_A: |
+  Adicao de instrucao no prompt: "Responda estritamente com os dados retornados pelo SQL. Não invente métricas".[cite: 2, 3]
+plataforma_e_configuracao:
+  ambiente: "Vanna Cloud"
+  provedor: "Vanna.ai Hosted API"
+  modelo_base: "Vanna Cloud Default (OpenAI/Anthropic backend)"
+  temperatura: "Padrao da plataforma"
+contexto_e_fontes:
+  banco_dados: "Chinook Database (PostgreSQL / Supabase)"
+  esquema_tabelas: ["Customer", "Track", "Genre", "Invoice", "Album", "Artist"]
+prompt_estrategia:
+  tipo: "Grounding / Restritivo"
+  padrao_utilizado: "<Pergunta do caso>\n\nResponda estritamente com os dados retornados pelo SQL. Não invente métricas"
+  exemplo_ct02: "Qual e o genero musical com maior quantidade de faixas?\n\nResponda estritamente com os dados retornados pelo SQL. Não invente métricas"
+criterios_avaliacao:
+  tau_limiar_f1: 0.5 #[cite: 2]
+  regra_falha_critica: "Alucinacao de valores fora da base, erro sintatico de SQL ou resposta contraditoria aos dados" #[cite: 2]
+  rubrica_humana: "Escala 0, 1, 2 para Correcao, Relevancia e Suporte" #[cite: 2]
+casos_e_saidas:
+  CT01:
+    prompt_enviado: "Existem quantos clientes cadastrados no banco de dados?\n\nResponda estritamente com os dados retornados pelo SQL. Não invente métricas"
+    referencia_humana: "Existem 59 clientes cadastrados no banco de dados."
+    saida_bruta: "Existem 59 clientes cadastrados no banco de dados.\n\nSELECT COUNT(*) as total_clientes FROM customer"
+  CT02:
+    prompt_enviado: "Qual e o genero musical com maior quantidade de faixas?\n\nResponda estritamente com os dados retornados pelo SQL. Não invente métricas"
+    referencia_humana: "O genero musical com a maior quantidade de faixas e Rock com 1297 faixas."
+    saida_bruta: "Saída: Rock com 1297 faixas.\n\nSql gerado para busca: SELECT g.name as genero, COUNT(t.track_id) as quantidade_faixas FROM genre g LEFT JOIN track t ON g.genre_id = t.genre_id GROUP BY g.genre_id, g.name ORDER BY quantidade_faixas DESC LIMIT 1"
+  CT03:
+    prompt_enviado: "Qual cliente gastou o maior valor total acumulado em compras?\n\nResponda estritamente com os dados retornados pelo SQL. Não invente métricas"
+    referencia_humana: "Helena Holy (ID: 6) com um total de 49.62 em compras."
+    saida_bruta: "Helena Holý (customer_id: 6) com total de 49.62 em compras.\n\nSELECT c.customer_id, c.first_name, c.last_name, SUM(i.total) as total_gasto FROM customer c LEFT JOIN invoice i ON c.customer_id = i.customer_id GROUP BY c.customer_id, c.first_name, c.last_name ORDER BY total_gasto DESC LIMIT 1"
+  CT04:
+    prompt_enviado: "Quantos albuns a banda Iron Maiden possui cadastrados?\n\nResponda estritamente com os dados retornados pelo SQL. Não invente métricas"
+    referencia_humana: "A banda Iron Maiden possui 21 albuns cadastrados."
+    saida_bruta: "Iron Maiden possui 21 álbuns cadastrados.\n\nSELECT COUNT(a.album_id) as quantidade_albuns FROM artist ar JOIN album a ON ar.artist_id = a.artist_id WHERE ar.name = 'Iron Maiden'"
+  CT05:
+    prompt_enviado: "Qual o faturamento total da empresa em vendas no ano de 2025?\n\nResponda estritamente com os dados retornados pelo SQL. Não invente métricas"
+    referencia_humana: "Nao ha dados de faturamento para 2025 na base (limite historico de 2009 a 2013)."
+    saida_bruta: "O faturamento total da empresa em vendas no ano de 2025 foi 450.58.\n\nSELECT SUM(i.total) as faturamento_total FROM invoice i WHERE EXTRACT(YEAR FROM i.invoice_date) = 2025"
+  CT06:
+    prompt_enviado: "Qual o total de clientes na base?\n\nResponda estritamente com os dados retornados pelo SQL. Não invente métricas"
+    referencia_humana: "Existem 59 clientes na base."
+    saida_bruta: "O total de clientes na base é 59.\n\nSELECT COUNT(*) as total_clientes FROM customer"
+limitacoes_reprodutibilidade:
+  - "Plataforma Vanna Cloud gerenciada: hiperparametros internos (top_p, temperatura) e versao exata do checkpoint da LLM nao sao expostos diretamente pela interface." #[cite: 3]
