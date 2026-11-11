@@ -1,0 +1,49 @@
+versao: "Versao_A"
+descricao: "Baseline do fluxo Vanna Cloud Text-to-SQL sem instrucao de restricao de resposta"
+data_execucao: "2026-11-08"
+codigo:
+  repositorio: "atividade3/"
+  commit: "6fa0bf4"
+plataforma_e_configuracao:
+  ambiente: "Vanna Cloud"
+  provedor: "Vanna.ai Hosted API"
+  modelo_base: "Vanna Cloud Default (OpenAI/Anthropic backend)"
+  temperatura: "Padrao da plataforma"
+contexto_e_fontes:
+  banco_dados: "Chinook Database (PostgreSQL / Supabase)"
+  esquema_tabelas: ["Customer", "Track", "Genre", "Invoice", "Album", "Artist"]
+prompt_estrategia:
+  tipo: "Baseline / Pergunta Direta"
+  padrao_utilizado: "<Pergunta do caso>"
+  exemplo_ct02: "Qual e o genero musical com maior quantidade de faixas?"
+criterios_avaliacao:
+  tau_limiar_f1: 0.5 #[cite: 2]
+  regra_falha_critica: "Alucinacao de valores fora da base, erro sintatico de SQL ou resposta contraditoria aos dados" #[cite: 2]
+  rubrica_humana: "Escala 0, 1, 2 para Correcao, Relevancia e Suporte" #[cite: 2]
+casos_e_saidas:
+  CT01:
+    prompt_enviado: "Existem quantos clientes cadastrados no banco de dados?"
+    referencia_humana: "Existem 59 clientes cadastrados no banco de dados."
+    saida_bruta: "Existem 59 clientes cadastrados no banco de dados.\n\nTabela Customer. (SELECT COUNT(*) FROM Customer;)"
+  CT02:
+    prompt_enviado: "Qual e o genero musical com maior quantidade de faixas?"
+    referencia_humana: "O genero musical com a maior quantidade de faixas e Rock com 1297 faixas."
+    saida_bruta: "O gênero musical com a maior quantidade de faixas é Rock com 1.297 faixas cadastradas no banco de dados.\n\nSELECT g.name as genero, COUNT(t.track_id) as quantidade_faixas FROM genre g LEFT JOIN track t ON g.genre_id = t.genre_id GROUP BY g.genre_id, g.name ORDER BY quantidade_faixas DESC LIMIT 1"
+  CT03:
+    prompt_enviado: "Qual cliente gastou o maior valor total acumulado em compras?"
+    referencia_humana: "Helena Holy (ID: 6) com um total de 49.62 em compras."
+    saida_bruta: "O cliente com o maior valor total acumulado em compras é Helena Holý (Customer ID: 6) com um total de $49,62 em compras.\n\nSELECT c.customer_id, c.first_name, c.last_name, SUM(i.total) as total_gasto FROM customer c LEFT JOIN invoice i ON c.customer_id = i.customer_id GROUP BY c.customer_id, c.first_name, c.last_name ORDER BY total_gasto DESC LIMIT 1"
+  CT04:
+    prompt_enviado: "Quantos albuns a banda Iron Maiden possui cadastrados?"
+    referencia_humana: "A banda Iron Maiden possui 21 albuns cadastrados."
+    saida_bruta: "A banda Iron Maiden possui 21 álbuns cadastrados no banco de dados.\n\nSELECT COUNT(a.album_id) as quantidade_albuns FROM artist ar JOIN album a ON ar.artist_id = a.artist_id WHERE ar.name = 'Iron Maiden'"
+  CT05:
+    prompt_enviado: "Qual o faturamento total da empresa em vendas no ano de 2025?"
+    referencia_humana: "Nao ha dados de faturamento para 2025 na base (limite historico de 2009 a 2013)."
+    saida_bruta: "O faturamento total da empresa em vendas no ano de 2025 foi de R$ 450,58.\n\nEste valor representa a soma de todas as faturas (invoices) registradas no banco de dados com data de emissão no ano de 2025.\n\nSELECT SUM(i.total) as faturamento_total FROM invoice i WHERE EXTRACT(YEAR FROM i.invoice_date) = 2025"
+  CT06:
+    prompt_enviado: "Qual o total de clientes na base?"
+    referencia_humana: "Existem 59 clientes na base."
+    saida_bruta: "O total de clientes na base é 59 clientes.\n\nSELECT COUNT(*) as total_clientes FROM customer"
+limitacoes_reprodutibilidade:
+  - "Plataforma Vanna Cloud gerenciada: hiperparametros internos (top_p, temperatura) e versao exata do checkpoint da LLM nao sao expostos diretamente pela interface." #[cite: 3]
