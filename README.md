@@ -21,7 +21,7 @@
 
 A URL pública e os dados do vídeo de demonstração estão indicados abaixo e no arquivo [`VIDEO.md`](./VIDEO.md):
 
-- **Link do Vídeo:** [INSERIR LINK DO VÍDEO]
+- **Link do Vídeo:** https://drive.google.com/file/d/1UVdjX8BDsj0tL7Mv_Jz4lGwOm9RDi60R/view?usp=drive_link
 - **Data de Gravação:** 11/11/2026
 - **Participantes:** Equipe 07.
 
