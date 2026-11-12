@@ -1,0 +1,22 @@
+﻿caso;versao;resposta_pdf;resposta
+CT01;B;1;Existem 59 clientes cadastrados no banco de dados.
+CT01;A;2;Resultado: Existem 59 clientes cadastrados no banco de dados.
+CT02;A;1;Resultado: O gênero musical com a maior quantidade de faixas é Rock com 1.297 faixas cadastradas no banco de dados.
+CT02;B;2;Rock com 1297 faixas.
+CT03;B;1;Helena Holý (customer_id: 6) com total de 49.62 em compras.
+CT03;A;2;Resultado: O cliente com o maior valor total acumulado em compras é Helena Holý (Customer ID: 6) com um total de $49,62 em compras.
+CT04;A;1;Resultado: A banda Iron Maiden possui 21 álbuns cadastrados no banco de dados.
+CT04;B;2;Iron Maiden possui 21 álbuns cadastrados.
+CT05;B;1;O faturamento total da empresa em vendas no ano de 2025 retornou vazio (nenhum valor).
+CT05;A;2;"Resultado
+
+Baseado na consulta realizada ao banco de dados, não há registros de faturamento para o ano de 2025.
+
+O resultado vazio indica que:
+
+Não existem faturas registradas com data em 2025, ou
+Os dados disponíveis no banco de dados não cobrem ainda o ano de 2025
+
+Você gostaria que eu verificasse qual é o período de cobertura dos dados disponíveis no banco de dados para entender melhor o intervalo de anos disponíveis?"
+CT06;A;1;Resultado: O total de clientes na base é 59 clientes.
+CT06;B;2;O total de clientes na base é 59.

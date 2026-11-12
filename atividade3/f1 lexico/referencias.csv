@@ -1,0 +1,7 @@
+caso;pergunta;referencia
+CT01;Quantos clientes cadastrados existem no banco de dados?;Existem 59 clientes cadastrados no banco de dados.
+CT02;Qual é o gênero musical com a maior quantidade de faixas?;O gênero com maior quantidade de faixas é Rock, com 1297 faixas.
+CT03;Qual cliente teve o maior valor total acumulado em compras?;A cliente com maior valor total gasto é Helena Holý, totalizando $49.62.
+CT04;Quantos álbuns a banda 'Iron Maiden' possui cadastrados?;A banda Iron Maiden possui 21 álbuns cadastrados.
+CT05;Qual foi o faturamento total da empresa em vendas no ano de 2025?;Não há dados disponíveis sobre o faturamento de 2025 no banco de dados.
+CT06;Qual o total de clietes na base?;Existem 59 clientes cadastrados no banco de dados.
